@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Client;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class EditProfileRequest extends FormRequest
 {
@@ -23,12 +25,38 @@ class EditProfileRequest extends FormRequest
     {
         return [
             'name' => 'string|max:255',
-            'email' => 'email|max:255|unique:users,email,' . $this->route('id'),
+            'email' => [
+                'email:rfc,dns',
+                'max:255',
+                Rule::unique('users')->ignore(auth()->id())
+            ],
             'phone' => 'string|max:20',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'password' => 'string|min:8|confirmed',
+            'address' => 'string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'password' => 'nullable|string|min:8|confirmed',
             'emails' => 'array',
-            'emails.*' => 'email|max:255|unique:client_emails,email,' . $this->route('id') . ',client_id' // Assuming client_id is the foreign
+        'emails.*' => [
+            'email:rfc,dns',
+            'max:255',
+            function ($attribute, $value, $fail)  {
+                // Check if email exists for any OTHER client
+                $exists = DB::table('client_emails')
+                    ->where('email', $value)
+                    ->where('client_id', '!=', auth()->user()->id)
+                    ->exists();
+                    
+                if ($exists) {
+                    $fail("The email $value already exists for another client.");
+                }
+            }
+        ]
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'emails.*.email' => 'The email must be a valid email address.',
+            'emails.*.unique' => 'The email :input already exists for this client.',
         ];
     }
 }

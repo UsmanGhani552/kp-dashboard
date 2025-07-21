@@ -6,11 +6,13 @@ use App\Http\Requests\Client\EditProfileRequest;
 use App\Http\Requests\Client\StoreClientRequest;
 use App\Http\Requests\Client\UpdateClientRequest;
 use App\Models\Client;
+use App\Models\ClientAssignedPackage;
 use App\Models\Package;
 use App\Models\User;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Expr\Assign;
 
 class ClientController extends Controller
 {
@@ -31,8 +33,10 @@ class ClientController extends Controller
     public function store(StoreClientRequest $request)
     {
         try {
-            Client::createClient($request->validated());
-            return ResponseTrait::success('Client created successfully');
+            $client = Client::createClient($request->validated());
+            return ResponseTrait::success('Client created successfully',[
+                'client' => $client,
+            ]);
         } catch (\Throwable $th) {
             return ResponseTrait::error('An error occurred while creating the client: ' . $th->getMessage());
         }
@@ -44,12 +48,15 @@ class ClientController extends Controller
             DB::beginTransaction();
             $validated = $request->validated();
             $client = Client::findOrFail($id);
+            $package = null;
             if (isset($validated['package_id'])) {
                 $package = Package::findOrFail($validated['package_id']);
             }
             $client->updateClient($validated, $package);
             DB::commit();
-            return ResponseTrait::success('Client updated successfully');
+            return ResponseTrait::success('Client updated successfully',[
+                'client' => $client,
+            ]);
         } catch (\Throwable $th) {
             DB::rollBack();
             return ResponseTrait::error('An error occurred while updating the client: ' . $th->getMessage());
@@ -67,11 +74,25 @@ class ClientController extends Controller
         }
     }
 
-    //client
-    public function editProfile(EditProfileRequest $request, $id) {
+    public function assignedPackages($id) {
         try {
-            $client = Client::findOrFail($id);
+            $client = ClientAssignedPackage::where('client_id', $id)
+                ->with(['package.category', 'package.deliverables'])
+                ->get();
+            return ResponseTrait::success('Assigned Packages',[
+                'assigned_packages' => $client,
+            ]);
+        } catch (\Throwable $th) {
+            return ResponseTrait::error('An error occurred while retrieving assigned packages: ' . $th->getMessage());
+        }
+    }
+
+    //client
+    public function editProfile(EditProfileRequest $request) {
+        try {
+            $client = auth()->user();
             $client->editProfile($request->validated());
+            $client->load('clientEmails');
             return ResponseTrait::success('client updated successfully', [
                 'client' => $client,
             ]);

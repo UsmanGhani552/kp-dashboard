@@ -10,6 +10,10 @@ class Category extends Model
         'name',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
     /**
      * Get the packages associated with the category.
      */

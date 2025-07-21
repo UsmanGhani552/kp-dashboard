@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Invoice\StoreInvoiceRequest;
 use App\Http\Requests\Invoice\UpdateInvoiceRequest;
 use App\Models\Invoice;
+use App\Models\Payment;
+use App\Models\PaymentType;
 use App\Traits\ResponseTrait;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
@@ -13,7 +15,7 @@ class InvoiceController extends Controller
 {
     public function index()
     {
-        $invoices = Invoice::with('client.packages')->get();
+        $invoices = Invoice::with('client.packages', 'createdBy')->get();
         return ResponseTrait::success('Invoices retrieved successfully', [
             'invoices' => $invoices,
         ]);
@@ -33,7 +35,7 @@ class InvoiceController extends Controller
             return ResponseTrait::error('An error occurred while creating the invoice: ' . $th->getMessage());
         }
     }
-    public function update(UpdateInvoiceRequest $request,$id)
+    public function update(UpdateInvoiceRequest $request, $id)
     {
         try {
             $invoice = Invoice::findOrFail($id);
@@ -49,7 +51,8 @@ class InvoiceController extends Controller
         }
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         try {
             $invoice = Invoice::findOrFail($id);
             $invoice->deleteInvoice();
@@ -57,5 +60,26 @@ class InvoiceController extends Controller
         } catch (\Throwable $th) {
             return ResponseTrait::error('An error occurred while deleting the invoice: ' . $th->getMessage());
         }
+    }
+
+    public function getPaymentTypes()
+    {
+        try {
+            $payment_types = PaymentType::all();
+            return ResponseTrait::success('Payment types', [
+                'payment_types' => $payment_types,
+            ]);
+        } catch (\Throwable $th) {
+            return ResponseTrait::error('An error occurred while creating the invoice: ' . $th->getMessage());
+        }
+    }
+
+    public function getPaymentHistory()
+    {
+        $client = auth()->user();
+        $invoices = Invoice::where('client_id', $client->id)->get();
+        return ResponseTrait::success('Payment types', [
+            'payment_history' => $invoices,
+        ]);
     }
 }

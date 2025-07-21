@@ -17,7 +17,7 @@ class SuperAdminSeeder extends Seeder
     public function run(): void
     {
         $admin_role = Role::firstOrCreate(
-            ['name' => 'super admin'],
+            ['name' => 'admin'],
             ['guard_name' => 'web']
         );
         

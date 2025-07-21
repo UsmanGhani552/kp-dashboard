@@ -22,14 +22,14 @@ class UpdatePackageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-            'price' => 'required|numeric|min:0',
-            'additional_notes' => 'required|string',
-            'document' => 'required|file|mimes:pdf,doc,docx',
-            'deliverables' => 'array',
-            'deliverables.*.name' => 'required|string|max:255',
+            'name' => 'string|max:255',
+            'description' => 'string',
+            'category_id' => 'exists:categories,id',
+            'price' => 'numeric|min:0',
+            'additional_notes' => 'string',
+            'document' => 'file|mimes:pdf,doc,docx',
+            // 'deliverables' => 'array',
+            // 'deliverables.*.name' => 'string|max:255',
         ];
     }
 }

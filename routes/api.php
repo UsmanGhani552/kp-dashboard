@@ -23,13 +23,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/show/{id}', 'show')->name('show');
         Route::post('/update/{id}', 'update')->name('update');
         Route::delete('/delete/{id}', 'delete')->name('delete');
+        Route::post('/assign-package/{package_id}', 'assignPackage')->name('assign-package');
     });
+    Route::get('/categories', [PackageController::class, 'categories'])->name('categories');
     Route::controller(ClientController::class)->prefix('clients')->name('clients.')->group(function() {
         Route::get('/','index')->name('index');
         Route::post('/store', 'store')->name('store');
         Route::post('/update/{id}', 'update')->name('update');
         Route::delete('/delete/{id}', 'delete')->name('delete');
-        Route::post('/edit-profile/{id}', 'editProfile')->name('edit-profile');
+        Route::get('/assigned-packages/{id}', 'assignedPackages')->name('assigned-packages');
+        Route::post('/edit-profile', 'editProfile')->name('edit-profile');
     });
 
     Route::controller(InvoiceController::class)->prefix('invoices')->name('invoices.')->group(function() {
@@ -37,6 +40,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/store', 'store')->name('store');
         Route::post('/update/{id}', 'update')->name('update');
         Route::delete('/delete/{id}', 'delete')->name('delete');
+        Route::get('/get-payment-types', 'getPaymentTypes')->name('get-payment-types');
+        Route::get('/get-payment-history', 'getPaymentHistory')->name('get-payment-history');
     });
 
     Route::get('/login-activities',[LoginActivityController::class,'index'])->name('login-activities');
