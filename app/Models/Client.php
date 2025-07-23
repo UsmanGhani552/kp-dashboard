@@ -64,21 +64,23 @@ class Client extends Authenticatable
             'image' => $data['image'],
         ]);
         if (!empty($data['package_id'])) {
-             $this->assignPackageWithInvoice($this, $package);
+            $this->assignPackageWithInvoice($package, true);
         }
         return $this->fresh();
     }
-    public static function assignPackageWithInvoice(Client $client, array $package)
+    public function assignPackageWithInvoice(array $package, $returnClient = false)
     {
         // Assign the package
-        ClientAssignedPackage::assignPackage([
-            'client_id' => $client->id,
+        $assignedPackage = ClientAssignedPackage::assignPackage([
+            'client_id' => $this->id,
             'package_id' => $package['id'],
         ]);
 
         // Create the invoice
         Invoice::createInvoice([
-            'client_id' => $client->id,
+            'client_id' => $this->id,
+            'package_id' => $package['id'],
+            'assigned_package_id' => $assignedPackage->id,
             'title' => $package['name'],
             'price' => $package['price'],
             'remaining_price' => 0,
@@ -87,7 +89,7 @@ class Client extends Authenticatable
             'payment_type_id' => 3,
             'sale_type' => 'fresh sale'
         ]);
-        return $client->fresh();
+        return $returnClient ? $this->fresh() : $assignedPackage->load('package.category', 'package.deliverables');
     }
 
     public function deleteClient()

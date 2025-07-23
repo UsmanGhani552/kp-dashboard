@@ -21,7 +21,7 @@ class ClientController extends Controller
         $clients = Client::role('client')->with('packages')
             ->get()
             ->map(function ($client) {
-                $client->role = $client->getRoleNames()->first(); 
+                $client->role = $client->getRoleNames()->first();
                 unset($client->roles);
                 return $client;
             });
@@ -34,7 +34,7 @@ class ClientController extends Controller
     {
         try {
             $client = Client::createClient($request->validated());
-            return ResponseTrait::success('Client created successfully',[
+            return ResponseTrait::success('Client created successfully', [
                 'client' => $client,
             ]);
         } catch (\Throwable $th) {
@@ -50,11 +50,15 @@ class ClientController extends Controller
             $client = Client::findOrFail($id);
             $package = null;
             if (isset($validated['package_id'])) {
-                $package = Package::findOrFail($validated['package_id']);
+                $package = Package::findOrFail($validated['package_id'])->toArray();
+                $alreadyAssigned = ClientAssignedPackage::where('client_id', $client->id)->where('package_id', $package['id'])->first();
+                if ($alreadyAssigned) {
+                    return ResponseTrait::error('Package Already Assigned');
+                }
             }
             $client->updateClient($validated, $package);
             DB::commit();
-            return ResponseTrait::success('Client updated successfully',[
+            return ResponseTrait::success('Client updated successfully', [
                 'client' => $client,
             ]);
         } catch (\Throwable $th) {
@@ -74,12 +78,13 @@ class ClientController extends Controller
         }
     }
 
-    public function assignedPackages($id) {
+    public function assignedPackages($id)
+    {
         try {
             $client = ClientAssignedPackage::where('client_id', $id)
-                ->with(['package.category', 'package.deliverables'])
+                ->with(['package.category', 'package.deliverables','invoice'])
                 ->get();
-            return ResponseTrait::success('Assigned Packages',[
+            return ResponseTrait::success('Assigned Packages', [
                 'assigned_packages' => $client,
             ]);
         } catch (\Throwable $th) {
@@ -88,7 +93,8 @@ class ClientController extends Controller
     }
 
     //client
-    public function editProfile(EditProfileRequest $request) {
+    public function editProfile(EditProfileRequest $request)
+    {
         try {
             $client = auth()->user();
             $client->editProfile($request->validated());
@@ -99,6 +105,5 @@ class ClientController extends Controller
         } catch (\Throwable $th) {
             return ResponseTrait::error('An error occurred ' . $th->getMessage());
         }
-
     }
 }

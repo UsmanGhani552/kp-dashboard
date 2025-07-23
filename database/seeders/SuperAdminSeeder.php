@@ -23,7 +23,7 @@ class SuperAdminSeeder extends Seeder
         
         $client_role = Role::firstOrCreate(
             ['name' => 'client'],
-            ['guard_name' => 'web']
+            ['guard_name' => 'client']
         );
 
         // Create Super Admin user

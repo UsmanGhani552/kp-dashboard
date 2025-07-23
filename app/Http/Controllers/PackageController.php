@@ -90,12 +90,7 @@ class PackageController extends Controller
             if($alreadyAssigned){
                 return ResponseTrait::error('Package Already Assigned');
             }
-            $data = [
-                'client_id' => $client->id,
-                'package_id' => $package_id 
-            ];
-            $assignedPackage = Client::assignPackageWithInvoice($client,$package);
-            $assignedPackage->load('package.category', 'package.deliverables');
+            $assignedPackage = $client->assignPackageWithInvoice($package);
             return ResponseTrait::success('Package Assigned Successfully',[
                 'assigned_package' => $assignedPackage
             ]);

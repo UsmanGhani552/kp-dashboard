@@ -15,6 +15,8 @@ class Invoice extends Model
         'status',
         'description',
         'category_id',
+        'package_id',
+        'assigned_package_id',
         'payment_type_id',
         'sale_type',
     ];
@@ -41,8 +43,19 @@ class Invoice extends Model
         return $this->belongsTo(Client::class);
     }
 
-    public function createdBy() {
-        return $this->belongsTo(User::class, 'user_id');
+    public function package()
+    {
+        return $this->belongsTo(Package::class)->withDefault();
     }
 
+    public function assignedPackage()
+    {
+        return $this->belongsTo(ClientAssignedPackage::class)->withDefault();
+    }
+
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

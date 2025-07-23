@@ -82,4 +82,24 @@ class InvoiceController extends Controller
             'payment_history' => $invoices,
         ]);
     }
+
+    public function getInvoice($id)
+    {
+        $invoice = Invoice::with('client','package')->findOrFail($id);
+        return ResponseTrait::success('true', [
+            'invoice' => $invoice
+        ]);
+    }
+
+    public function getInvoiceByAssignment($assignment_id)
+    {
+        try {
+            $invoice = Invoice::where('assigned_package_id', $assignment_id)->with('client', 'package')->firstOrFail();
+            return ResponseTrait::success('true', [
+                'invoice' => $invoice
+            ]);
+        } catch (\Throwable $th) {
+            return ResponseTrait::error('An error occurred while creating the invoice: ' . $th->getMessage());
+        }
+    }
 }

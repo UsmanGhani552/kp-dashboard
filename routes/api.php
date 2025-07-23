@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LoginActivityController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\PaymentController;
 use App\Models\LoginActivity;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +15,8 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/send-password-reset-token', [PasswordResetController::class, 'sendPasswordResetToken'])->name('sendPasswordResetToken')->middleware('throttle:password-reset-limit');
 Route::post('/verify-password-reset-token', [PasswordResetController::class, 'verifyPasswordResetToken'])->name('verifyPasswordResetToken');
 Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('resetPassword');
-
+Route::post('/pay-with-square',[PaymentController::class,'payWithSquare'])->name('pay-with-square');
+Route::get('/get-invoice/{id}', [InvoiceController::class,'getInvoice'])->name('get-invoice');
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::controller(PackageController::class)->prefix('packages')->name('packages.')->group(function() {
@@ -42,7 +44,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/delete/{id}', 'delete')->name('delete');
         Route::get('/get-payment-types', 'getPaymentTypes')->name('get-payment-types');
         Route::get('/get-payment-history', 'getPaymentHistory')->name('get-payment-history');
+        Route::get('/get-invoice-by-assignment/{assignment_id}', 'getInvoiceByAssignment')->name('get-invoice-by-assignment');
     });
 
     Route::get('/login-activities',[LoginActivityController::class,'index'])->name('login-activities');
 });
+
