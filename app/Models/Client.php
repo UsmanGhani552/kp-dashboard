@@ -90,6 +90,7 @@ class Client extends Authenticatable
 
         // Create the invoice
         Invoice::createInvoice([
+            'user_id' => auth()->user()->id,
             'client_id' => $this->id,
             'package_id' => $package['id'],
             'assigned_package_id' => $assignedPackage->id,
