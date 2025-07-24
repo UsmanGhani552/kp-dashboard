@@ -14,7 +14,6 @@ class Client extends Authenticatable
 {
     use HasApiTokens, Notifiable, ImageUploadTrait, HasRoles;
     protected $table = 'users';
-    protected $guard_name = 'client';
 
     protected $fillable = [
         'name',
