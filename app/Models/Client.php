@@ -20,7 +20,7 @@ class Client extends Authenticatable
         'name',
         'email',
         'username',
-        'address',
+        'address',  
         'phone',
         'image',
         'password',
@@ -39,6 +39,18 @@ class Client extends Authenticatable
             return asset('images/clients/' . $this->image);
         }
         return asset('images/clients/default.png');
+    }
+
+    public static function register(array $data)
+    {
+        $user = self::create([
+            'name' => $data['name'],
+            'username' => $data['username'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
+
+        return $user;
     }
     public static function createClient(array $data)
     {

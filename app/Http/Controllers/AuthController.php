@@ -75,7 +75,7 @@ class AuthController extends Controller
         try {
             // Create the user
             DB::beginTransaction();
-            $user = User::register($request->all());
+            $user = Client::register($request->all());
             $user->assignRole('client');
             $role = $user->getRoleNames()->first();
             $user['role'] = $role;

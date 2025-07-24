@@ -57,19 +57,6 @@ class User extends Authenticatable
     }
 
 
-    public static function register(array $data)
-    {
-        $user = self::create([
-            'name' => $data['name'],
-            'username' => $data['username'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-
-        return $user;
-    }
-
-
     public static function changePassword(self $user, array $data): void
     {
         $data['password'] = Hash::make($data['password']);
