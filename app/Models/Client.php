@@ -138,6 +138,6 @@ class Client extends Authenticatable
     }
     public function resetToken()
     {
-        return $this->hasOne(PasswordResetToken::class);
+        return $this->hasOne(PasswordResetToken::class,'user_id');
     }
 }
