@@ -136,4 +136,8 @@ class Client extends Authenticatable
             'package_id'
         );
     }
+    public function resetToken()
+    {
+        return $this->hasOne(PasswordResetToken::class);
+    }
 }
