@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('category_id');
             $table->string('price');
             $table->text('additional_notes');
-            $table->string('document');
+            $table->string('document')->nullable();
             $table->timestamps();
         });
     }
