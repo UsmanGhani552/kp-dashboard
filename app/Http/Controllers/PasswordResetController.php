@@ -58,9 +58,9 @@ class PasswordResetController extends Controller
     public function resetPassword(ResetPasswordRequest $request)
     {
         try {
-            $user_id = $request->validated()['user_id'];
-            $user = User::where('id', $user_id)->first();
-            User::changePassword($user, $request->validated());
+            $client_id = $request->validated()['user_id'];
+            $user = Client::where('id', $client_id)->first();
+            Client::changePassword($user, $request->validated());
             return ResponseTrait::success('Password Reset Successfully');
         } catch (Exception $e) {
             return ResponseTrait::error('An error occurred: ' . $e->getMessage());

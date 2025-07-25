@@ -57,13 +57,6 @@ class User extends Authenticatable
     }
 
 
-    public static function changePassword(self $user, array $data): void
-    {
-        $data['password'] = Hash::make($data['password']);
-        $user->update(['password' => $data['password']]);
-    }
-
-
     public function resetToken()
     {
         return $this->hasOne(PasswordResetToken::class);
