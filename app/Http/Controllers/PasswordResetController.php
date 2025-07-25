@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\SendPasswordResetTokenRequest;
-use App\Http\Requests\verifyPasswordResetTokenRequest;
+use App\Http\Requests\VerifyPasswordResetTokenRequest;
 use App\Mail\SendOtpMail;
+use App\Models\Client;
 use App\Models\PasswordResetToken;
 use App\Models\User;
 use App\Traits\ResponseTrait;
@@ -23,7 +24,7 @@ class PasswordResetController extends Controller
         try {
             DB::beginTransaction();
             $email = $request->validated()['email'];
-            $user = User::where('email', $email)->first();
+            $user = Client::where('email', $email)->first();
             $token = rand(100000, 999999);
             PasswordResetToken::saveToken($user->id, $token);
             DB::commit();
@@ -41,7 +42,7 @@ class PasswordResetController extends Controller
         try {
             $email = $request->validated()['email'];
             $token = $request->validated()['token'];
-            $user = User::where('email', $email)->first();
+            $user = Client::where('email', $email)->first();
             if ($user->resetToken->expires_at < now()) {
                 return ResponseTrait::error('Token Expired');
             } else if ($token !== $user->resetToken->token) {
