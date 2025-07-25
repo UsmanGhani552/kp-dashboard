@@ -27,7 +27,7 @@ class StorePackageRequest extends FormRequest
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'additional_notes' => 'required|string',
-            'document' => 'required|file|mimes:pdf,doc,docx',
+            'document' => 'file|mimes:pdf,doc,docx',
             'deliverables' => 'array',
             'deliverables.*.name' => 'required|string|max:255',
         ];
