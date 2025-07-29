@@ -108,7 +108,7 @@ class Client extends Authenticatable
             'description' => $package['description'],
             'category_id' => $package['category_id'],
             'payment_type_id' => 3,
-            'sale_type' => 'fresh sale'
+            'sale_type' => 'Fresh Sale'
         ]);
         return $returnClient ? $this->fresh() : $assignedPackage->load('package.category', 'package.deliverables');
     }
