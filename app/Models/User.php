@@ -32,7 +32,14 @@ class User extends Authenticatable
         'provider',
         'password',
     ];
-
+    protected $appends = ['image_url'];
+    public function getImageUrlAttribute()
+    {
+        if ($this->image) {
+            return asset('images/users/' . $this->image);
+        }
+        return asset('images/users/default.png');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -61,5 +68,4 @@ class User extends Authenticatable
     {
         return $this->hasOne(PasswordResetToken::class);
     }
-
 }
