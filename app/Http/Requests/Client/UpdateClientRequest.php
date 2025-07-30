@@ -24,9 +24,9 @@ class UpdateClientRequest extends FormRequest
         return [
             'name' => 'string|max:255',
             'email' => 'email|max:255|unique:users,email,' . $this->route()->id,
-            'username' => 'string|max:255|unique:users,username,' . $this->route()->id,
+            'username' => 'nullable|string|max:255|unique:users,username,' . $this->route()->id,
             'phone' => 'string|max:12',
-            'address' => 'string',
+            'address' => 'nullable|string',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'password' => 'string|min:8|confirmed',
             'package_id' => 'exists:packages,id',
