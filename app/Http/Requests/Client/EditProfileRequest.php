@@ -31,7 +31,7 @@ class EditProfileRequest extends FormRequest
                 Rule::unique('users')->ignore(auth()->id())
             ],
             'phone' => 'string|max:20',
-            'address' => 'string|max:255',
+            'address' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'password' => 'nullable|string|min:8|confirmed',
             'emails' => 'array',

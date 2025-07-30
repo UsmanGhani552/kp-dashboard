@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class LoginActivityController extends Controller
 {
     public function index() {
-        $loginActivities = LoginActivity::with('user')->get()->map(function($activity){
+        $loginActivities = LoginActivity::with('user')->orderBy('created_at', 'desc')->get()->map(function($activity){
             $activity->date = $activity->created_at->toDateString();
             $activity->time = $activity->created_at->toTimeString();
             unset($activity->created_at, $activity->updated_at); 

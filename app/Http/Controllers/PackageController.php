@@ -19,7 +19,7 @@ class PackageController extends Controller
 {
     public function index()
     {
-        $packages = Package::with('category', 'deliverables')->get();
+        $packages = Package::with('category', 'deliverables')->orderBy('created_at', 'desc')->get();
         return ResponseTrait::success('Packages retrieved successfully', [
             'packages' => $packages,
         ]);

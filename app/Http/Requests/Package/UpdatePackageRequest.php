@@ -26,7 +26,7 @@ class UpdatePackageRequest extends FormRequest
             'description' => 'string',
             'category_id' => 'exists:categories,id',
             'price' => 'numeric|min:0',
-            'additional_notes' => 'string',
+            'additional_notes' => 'nullable|string',
             'document' => 'file|mimes:pdf,doc,docx,.txt',
             // 'deliverables' => 'array',
             // 'deliverables.*.name' => 'string|max:255',

@@ -26,7 +26,7 @@ class StorePackageRequest extends FormRequest
             'description' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
-            'additional_notes' => 'string',
+            'additional_notes' => 'nullable|string',
             'document' => 'file|mimes:pdf,doc,docx,.txt',
             'deliverables' => 'array',
             'deliverables.*.name' => 'required|string|max:255',
