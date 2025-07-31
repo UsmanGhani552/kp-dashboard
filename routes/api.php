@@ -3,6 +3,7 @@
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LoginActivityController;
 use App\Http\Controllers\PackageController;
@@ -45,6 +46,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/get-payment-types', 'getPaymentTypes')->name('get-payment-types');
         Route::get('/get-payment-history', 'getPaymentHistory')->name('get-payment-history');
         Route::get('/get-invoice-by-assignment/{assignment_id}', 'getInvoiceByAssignment')->name('get-invoice-by-assignment');
+    });
+    Route::controller(BrandController::class)->prefix('brands')->name('brands.')->group(function() {
+        Route::get('/','index')->name('index');
+        Route::post('/store', 'store')->name('store');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::delete('/delete/{id}', 'delete')->name('delete');
     });
 
     Route::get('/login-activities',[LoginActivityController::class,'index'])->name('login-activities');
