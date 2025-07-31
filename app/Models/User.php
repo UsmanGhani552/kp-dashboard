@@ -63,6 +63,31 @@ class User extends Authenticatable
         ];
     }
 
+    public static function createUser(array $data)
+    {
+        $data['password'] = Hash::make($data['password']);
+        $data['image'] = (new self)->uploadImage(request(), 'image', 'images/users');
+
+        $user = self::create($data);
+        $user->assignRole('admin');
+        return $user;
+    }
+
+    public function updateUser(array $data)
+    {
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        }
+        $data['image'] = $this->uploadImage(request(), 'image', 'images/users', "images/users/{$this->image}", $this->image);
+        $this->update($data);
+        return $this;
+    }
+
+    public function deleteUser()
+    {
+        $this->deleteImage("images/users/{$this->image}");
+        $this->delete();
+    }
 
     public function resetToken()
     {
