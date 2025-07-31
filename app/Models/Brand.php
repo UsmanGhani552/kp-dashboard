@@ -30,7 +30,7 @@ class Brand extends Model
     }
     public function updateBrand(array $data)
     {
-        $data['logo'] = $this->uploadImage(request(), 'logo', 'images/brands');
+        $data['logo'] = $this->uploadImage(request(), 'logo', 'images/brands', "images/brands/{$this->logo}", $this->logo);
         return $this->update($data);
     }
     public function deleteBrand()
