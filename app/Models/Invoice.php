@@ -18,6 +18,7 @@ class Invoice extends Model
         'package_id',
         'assigned_package_id',
         'payment_type_id',
+        'brand_id',
         'sale_type',
     ];
 
@@ -57,5 +58,10 @@ class Invoice extends Model
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
     }
 }

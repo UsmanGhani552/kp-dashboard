@@ -15,7 +15,7 @@ class InvoiceController extends Controller
 {
     public function index()
     {
-        $invoices = Invoice::with('client.packages', 'createdBy')->orderBy('created_at', 'desc')->get();
+        $invoices = Invoice::with('client.packages', 'createdBy', 'brand')->orderBy('created_at', 'desc')->get();
         return ResponseTrait::success('Invoices retrieved successfully', [
             'invoices' => $invoices,
         ]);
@@ -43,7 +43,7 @@ class InvoiceController extends Controller
                 'user_id' => auth()->user()->id,
             ]);
             $invoice->updateInvoice($data);
-            return ResponseTrait::success('Invoice created successfully', [
+            return ResponseTrait::success('Invoice updated successfully', [
                 'invoice' => $invoice,
             ]);
         } catch (\Throwable $th) {
@@ -85,7 +85,7 @@ class InvoiceController extends Controller
 
     public function getInvoice($id)
     {
-        $invoice = Invoice::with('client','package')->findOrFail($id);
+        $invoice = Invoice::with('client', 'package', 'brand')->findOrFail($id);
         return ResponseTrait::success('true', [
             'invoice' => $invoice
         ]);

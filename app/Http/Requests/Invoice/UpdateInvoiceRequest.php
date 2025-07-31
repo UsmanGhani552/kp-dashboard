@@ -28,6 +28,7 @@ class UpdateInvoiceRequest extends FormRequest
             'remaining_price' => 'numeric|min:0',
             'description' => 'nullable|string|max:1000',
             'category_id' => 'exists:categories,id',
+            'brand_id' => 'exists:brands,id',
             'payment_type_id' => 'exists:payment_types,id',
             'sale_type' => 'string',
         ];

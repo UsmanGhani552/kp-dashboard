@@ -31,6 +31,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->foreignId('payment_type_id')->constrained('payment_types')->onDelete('cascade');
+            $table->foreignId('brand_id')->constrained('brands')->onDelete('cascade');
             $table->foreignId('package_id')->nullable()->constrained('packages');
             $table->foreignId('assigned_package_id')->nullable()->constrained('client_assigned_packages')->onDelete('set null');
             $table->string('sale_type'); // e.g., one-time, subscription

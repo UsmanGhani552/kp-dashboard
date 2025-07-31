@@ -28,6 +28,7 @@ class StoreInvoiceRequest extends FormRequest
             'remaining_price' => 'required|numeric|min:0',
             'description' => 'nullable|string|max:1000',
             'category_id' => 'required|exists:categories,id',
+            'brand_id' => 'required|exists:brands,id',
             'payment_type_id' => 'required|exists:payment_types,id',
             'sale_type' => 'required',
         ];
