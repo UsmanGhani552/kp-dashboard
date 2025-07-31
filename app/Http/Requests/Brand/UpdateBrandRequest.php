@@ -23,7 +23,7 @@ class UpdateBrandRequest extends FormRequest
     {
         return [
             'name' => 'string|max:255',
-            'email' => 'email|max:255|unique:brands,email',
+            'email' => 'email|max:255|unique:brands,email,' . $this->route()->id,
             'address' => 'nullable|string',
             'logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
