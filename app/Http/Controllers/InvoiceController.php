@@ -15,7 +15,7 @@ class InvoiceController extends Controller
 {
     public function index()
     {
-        $invoices = Invoice::with('client.packages', 'createdBy', 'brand')->orderBy('created_at', 'desc')->get();
+        $invoices = Invoice::with('client.packages', 'createdBy', 'brand')->orderBy('id', 'desc')->get();
         return ResponseTrait::success('Invoices retrieved successfully', [
             'invoices' => $invoices,
         ]);

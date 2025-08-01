@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::role('admin')->orderBy('created_at', 'desc')
+        $users = User::role('admin')->orderBy('id', 'desc')
             ->get();
         return ResponseTrait::success('user retrieved successfully', [
             'users' => $users,

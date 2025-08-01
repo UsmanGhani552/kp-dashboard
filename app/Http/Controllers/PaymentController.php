@@ -17,6 +17,8 @@ use Square\Environments;
 use Square\Payments\Requests\CreatePaymentRequest;
 use Square\Types\Money;
 
+use function PHPUnit\Framework\isEmpty;
+
 class PaymentController extends Controller
 {
     public function payWithSquare(Request $request)
@@ -81,8 +83,8 @@ class PaymentController extends Controller
         $invoice = Invoice::findOrFail($data['invoiceId']);
         $invoice->update(['status' => 1]);
         $this->sendEmailToCustomerAndAdmins($invoice);
-        dd('asdas');
-        if($invoice->assignedPackage){
+        if($invoice->assigned_package_id != null){
+            $invoice->load('assignedPackage');
             $assignedPackage = ClientAssignedPackage::findOrFail($invoice->assignedPackage->id);
             $assignedPackage->update(['status' => 1]);
         }

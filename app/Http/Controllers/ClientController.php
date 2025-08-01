@@ -18,7 +18,7 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $clients = Client::role('client')->with('packages')->orderBy('created_at', 'desc')
+        $clients = Client::role('client')->with('packages')->orderBy('id', 'desc')
             ->get()
             ->map(function ($client) {
                 $client->role = $client->getRoleNames()->first();
@@ -82,7 +82,7 @@ class ClientController extends Controller
     {
         try {
             $client = ClientAssignedPackage::where('client_id', $id)
-                ->with(['package.category', 'package.deliverables','invoice'])->orderBy('created_at', 'desc')
+                ->with(['package.category', 'package.deliverables','invoice'])->orderBy('id', 'desc')
                 ->get();
             return ResponseTrait::success('Assigned Packages', [
                 'assigned_packages' => $client,
