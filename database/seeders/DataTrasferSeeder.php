@@ -30,7 +30,7 @@ class DataTrasferSeeder extends Seeder
             $customers = collect($data[2]['data']);
 
             foreach ($customers as $item) {
-                Client::updateOrCreate(
+                $client = Client::updateOrCreate(
                     ['email' => $item['email']],
                     [
                         'name' => $item['name'],
@@ -40,6 +40,7 @@ class DataTrasferSeeder extends Seeder
                         'updated_at' => $item['updated_at'] ?? null,
                     ]
                 );
+                $client->assignRole('client');
                 Log::info($item['name']);
             }
             $invoices = base_path('storage/app/private/links.json');
