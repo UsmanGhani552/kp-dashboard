@@ -52,7 +52,7 @@ class PaymentController extends Controller
                 $payment = $response->getPayment();
                 $paymentData = [
                     'invoice_id' => $validated['invoiceId'],
-                    'assigned_package_id' => $validated['assignedPackageId'],
+                    // 'assigned_package_id' => $validated['assignedPackageId'] ?? null,
                     'price' => number_format($payment->getAmountMoney()->getAmount() / 100, 2),
                     'transaction_id' => $payment->getId(),
                     'transaction_details' => $payment->jsonSerialize()
