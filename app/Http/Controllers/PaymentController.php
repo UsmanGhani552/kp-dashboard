@@ -12,6 +12,7 @@ use Square\SquareClient;
 use App\Models\Invoice;
 use App\Models\ClientAssignedPackage;
 use App\Models\Payment;
+use Illuminate\Support\Facades\DB;
 use Square\Environments;
 use Square\Payments\Requests\CreatePaymentRequest;
 use Square\Types\Money;
@@ -76,11 +77,15 @@ class PaymentController extends Controller
 
     protected function updatePaymentStatusAndAssignment($data)
     {
+        DB::beginTransaction();
         $invoice = Invoice::findOrFail($data['invoiceId']);
         $invoice->update(['status' => 1]);
         $this->sendEmailToCustomerAndAdmins($invoice);
-        $assignedPackage = ClientAssignedPackage::findOrFail($invoice->assignedPackage->id);
-        $assignedPackage->update(['status' => 1]);
+        if($invoice->assignedPackage){
+            $assignedPackage = ClientAssignedPackage::findOrFail($invoice->assignedPackage->id);
+            $assignedPackage->update(['status' => 1]);
+        }
+        DB::commit();
     }
 
     public function sendEmailToCustomerAndAdmins($invoice)
