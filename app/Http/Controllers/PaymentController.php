@@ -24,7 +24,7 @@ class PaymentController extends Controller
             'sourceId' => 'required|string',
             'invoiceId' => 'required|exists:invoices,id',
             'amount' => 'required|numeric',
-            'assignedPackageId' => 'required|exists:client_assigned_packages,id'
+            'assignedPackageId' => 'exists:client_assigned_packages,id'
         ]);
         $amount = (int) $validated['amount'] * 100;
         $square = new SquareClient(
