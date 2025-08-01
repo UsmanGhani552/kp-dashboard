@@ -81,8 +81,8 @@ class PaymentController extends Controller
         $invoice = Invoice::findOrFail($data['invoiceId']);
         $invoice->update(['status' => 1]);
         $this->sendEmailToCustomerAndAdmins($invoice);
+        dd('asdas');
         if($invoice->assignedPackage){
-            dd('asdas');
             $assignedPackage = ClientAssignedPackage::findOrFail($invoice->assignedPackage->id);
             $assignedPackage->update(['status' => 1]);
         }
