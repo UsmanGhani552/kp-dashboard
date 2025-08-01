@@ -26,6 +26,7 @@ class UpdateBrandRequest extends FormRequest
             'email' => 'email|max:255|unique:brands,email,' . $this->route()->id,
             'address' => 'nullable|string',
             'logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo_mini' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }

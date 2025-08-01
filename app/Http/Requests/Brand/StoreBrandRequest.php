@@ -26,6 +26,7 @@ class StoreBrandRequest extends FormRequest
             'email' => 'required|email|max:255|unique:brands,email',
             'address' => 'nullable|string',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo_mini' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }

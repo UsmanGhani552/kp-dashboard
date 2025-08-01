@@ -28,7 +28,7 @@ class SuperAdminSeeder extends Seeder
 
         // Create Super Admin user
         $admin = User::firstOrCreate(
-            ['email' => 'superadmin@gmail.com'],
+            ['email' => 'testcustomer1@gmail.com'],
             [
                 'name' => 'Super Admin',
                 'username' => 'super_admin',

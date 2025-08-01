@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('address')->nullable();
             $table->string('logo');
+            $table->string('logo_mini');
             $table->timestamps();
         });
     }
