@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderPaid;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Square\Exceptions\SquareApiException;
 use Square\SquareClient;
@@ -76,7 +78,20 @@ class PaymentController extends Controller
     {
         $invoice = Invoice::findOrFail($data['invoiceId']);
         $invoice->update(['status' => 1]);
+        $this->sendEmailToCustomerAndAdmins($invoice);
         $assignedPackage = ClientAssignedPackage::findOrFail($data['assignedPackageId']);
         $assignedPackage->update(['status' => 1]);
+    }
+
+    public function sendEmailToCustomerAndAdmins($invoice)
+    {
+        // Email to Client
+        Mail::to($invoice->client->email)
+            ->send(new OrderPaid($invoice, true));
+
+        // Email to agent and admins
+        Mail::to($invoice->createdBy->email)
+            ->cc(config('constants.emails'))
+            ->send(new OrderPaid($invoice));
     }
 }
