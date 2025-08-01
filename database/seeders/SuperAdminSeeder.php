@@ -28,7 +28,7 @@ class SuperAdminSeeder extends Seeder
 
         // Create Super Admin user
         $admin = User::firstOrCreate(
-            ['email' => 'testcustomer1@gmail.com'],
+            ['email' => 'superadmin@gmail.com'],
             [
                 'name' => 'Super Admin',
                 'username' => 'super_admin',
@@ -36,7 +36,7 @@ class SuperAdminSeeder extends Seeder
             ]
         );
         $client = Client::firstOrCreate(
-            ['email' => 'usman.centosquare@gmail.com'],
+            ['email' => 'testcustomer1@gmail.com'],
             [
                 'name' => 'Test Customer 1',
                 'username' => 'test_customer_1',
