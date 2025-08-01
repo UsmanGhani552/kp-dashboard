@@ -75,6 +75,8 @@ class DataTrasferSeeder extends Seeder
                         'payment_type_id' => $payment_type_id,
                         'brand_id' => $brand->id ?? $koderspedia_brand_id,
                         'sale_type' => $item['sale_type'],
+                        'created_at' => $item['created_at'],
+                        'updated_at' => $item['updated_at'],
                     ]
                 );
                 Log::info(json_encode([
