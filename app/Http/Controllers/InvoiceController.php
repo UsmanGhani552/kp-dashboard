@@ -16,6 +16,17 @@ class InvoiceController extends Controller
     public function index()
     {
         $invoices = Invoice::with('client.packages', 'createdBy', 'brand')->orderBy('id', 'desc')->get();
+        $grouped = $invoices->groupBy('client_id')->map(function ($group) {
+            return $group->sum('price');
+        })->sortDesc();
+        $topClientId = $grouped->keys()->first();
+        $topClientName = optional($invoices->firstWhere('client_id', $topClientId)?->client)->name;
+        $topClientTotal = $grouped->first();
+        $invoices[0]['top_client'] = [
+            'id' => $topClientId,
+            'name' => $topClientName,
+            'amount' => $topClientTotal,
+        ];
         return ResponseTrait::success('Invoices retrieved successfully', [
             'invoices' => $invoices,
         ]);
