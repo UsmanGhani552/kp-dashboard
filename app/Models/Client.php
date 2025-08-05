@@ -78,7 +78,7 @@ class Client extends Authenticatable
         $this->update([
             'name' => $data['name'] ?? $this->name,
             'phone' => $data['phone'] ?? $this->phone,
-            'address' => $data['address'] ?? $this->phone,
+            'address' => $data['address'] ?? null,
             'email' => $data['email'] ?? $this->email,
             'password' => $data['password'] ?? $this->password,
             'image' => $data['image'],
