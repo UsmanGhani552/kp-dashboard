@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->string('category_id');
-            $table->string('price');
+            $table->decimal('price', 10, 2)->default(0);
             $table->text('additional_notes')->nullable();
             $table->string('document')->nullable();
             $table->timestamps();

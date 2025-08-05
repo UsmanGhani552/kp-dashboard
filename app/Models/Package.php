@@ -17,6 +17,15 @@ class Package extends Model
         'document',
     ];
 
+    protected $appends = ['document_url'];
+    public function getDocumentUrlAttribute()
+    {
+        if ($this->document) {
+            return asset('images/packages/' . $this->document);
+        }
+        return asset('images/packages/default.png');
+    }
+
     public static function createPackage(array $data) {
         $data['document'] = (new self)->uploadImage(request(),'document','images/packages');
         //  dd($data);

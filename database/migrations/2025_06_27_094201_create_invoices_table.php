@@ -25,7 +25,7 @@ return new class extends Migration
                 ->on('users')
                 ->onDelete('set null');
             $table->string('title');
-            $table->string('price');
+            $table->decimal('price', 10, 2)->default(0);
             $table->decimal('remaining_price', 10, 2)->default(0);
             $table->string('status')->default(0); // e.g., pending, paid
             $table->text('description')->nullable();
