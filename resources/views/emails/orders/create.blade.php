@@ -1,6 +1,6 @@
 @component('mail::message', [
     'app_name' => ucwords($invoice->brand->name),
-    'img_path' => "images/brands" . $invoice->brand->logo_url,
+    'img_path' => $invoice->brand->logo_url,
     'img_alt' => ucfirst($invoice->brand->name) . " Logo"
 ])
 New Order with Order # {{ $invoice->id }} has been created

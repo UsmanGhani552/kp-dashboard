@@ -1,6 +1,6 @@
 @component('mail::message', [
     'app_name' => ucwords($order->brand->name),
-    'img_path' => "images/brands" . $order->brand->logo,
+    'img_path' => $order->brand->logo_url,
     'img_alt' => ucfirst($order->brand->name) . " Logo"
 ])
 Order # {{ $order->id }} has been paid
