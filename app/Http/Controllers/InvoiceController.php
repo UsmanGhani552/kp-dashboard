@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Invoice\StoreInvoiceRequest;
 use App\Http\Requests\Invoice\UpdateInvoiceRequest;
+use App\Mail\OrderCreated;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\PaymentType;
 use App\Traits\ResponseTrait;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class InvoiceController extends Controller
 {
@@ -41,6 +43,7 @@ class InvoiceController extends Controller
                 'user_id' => auth()->user()->id,
             ]);
             $invoice = Invoice::createInvoice($data);
+            $this->sendEmailToCustomerAndAdmins($invoice);
             return ResponseTrait::success('Invoice created successfully', [
                 'invoice' => $invoice,
             ]);
@@ -114,5 +117,17 @@ class InvoiceController extends Controller
         } catch (\Throwable $th) {
             return ResponseTrait::error('An error occurred while creating the invoice: ' . $th->getMessage());
         }
+    }
+
+    public function sendEmailToCustomerAndAdmins($invoice)
+    {
+        // Email to Client
+        Mail::to($invoice->client->email)
+            ->send(new OrderCreated($invoice));
+
+        // Email to agent and admins
+        Mail::to($invoice->createdBy->email)
+            ->cc(config('constants.emails'))
+            ->send(new OrderCreated($invoice));
     }
 }

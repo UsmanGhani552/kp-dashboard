@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Models\LoginActivity;
 use App\Models\User;
 use App\Traits\ResponseTrait;
+use App\Traits\SendMailTrait;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    use SendMailTrait;
     public function login(LoginRequest $request)
 {
     try {
@@ -76,6 +78,8 @@ class AuthController extends Controller
             // Create the user
             DB::beginTransaction();
             $user = Client::register($request->all());
+            // dd($user);
+            $this->sendRegistrationDetailsToClient($user);
             $user->assignRole('client');
             $role = $user->getRoleNames()->first();
             $user['role'] = $role;

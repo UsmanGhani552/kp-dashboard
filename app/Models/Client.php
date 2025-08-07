@@ -56,16 +56,17 @@ class Client extends Authenticatable
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-
+        $user['plainPassword'] = $data['password'];
         return $user;
     }
     public static function createClient(array $data)
     {
+        $plainPassword = $data['password'];
         $data['password'] = Hash::make($data['password']);
         $data['image'] = (new self)->uploadImage(request(), 'image', 'images/clients');
         $client = self::create($data);
+        $client['plainPassword'] = $plainPassword;
         $client->assignRole('client');
-
         return $client;
     }
 

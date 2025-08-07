@@ -10,12 +10,14 @@ use App\Models\ClientAssignedPackage;
 use App\Models\Package;
 use App\Models\User;
 use App\Traits\ResponseTrait;
+use App\Traits\SendMailTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Expr\Assign;
 
 class ClientController extends Controller
 {
+    use SendMailTrait;
     public function index()
     {
         $clients = Client::role('client')->with('packages')->orderBy('id', 'desc')
@@ -34,6 +36,7 @@ class ClientController extends Controller
     {
         try {
             $client = Client::createClient($request->validated());
+            $this->sendRegistrationDetailsToClient($client);
             return ResponseTrait::success('Client created successfully', [
                 'client' => $client,
             ]);

@@ -21,6 +21,32 @@ use function PHPUnit\Framework\isEmpty;
 
 class PaymentController extends Controller
 {
+    public function payWithPaypal(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'orderId' => 'required|string',
+                'invoiceId' => 'required|exists:invoices,id',
+                'amount' => 'required|numeric',
+                'details' => 'required',
+            ]);
+            $paymentData = [
+                'invoice_id' => $validated['invoiceId'], 
+                'price' => $validated['amount'],
+                'transaction_id' => $validated['orderId'],
+                'transaction_details' => json_encode($validated['details'])
+            ];
+            Payment::storePaymentData($paymentData, 'paypal');
+            $this->updatePaymentStatusAndAssignment($validated);
+            return ResponseTrait::success('Payment Processed Successfully', [
+                    'success' => 1
+                ]);
+        } catch (\Throwable $th) {
+            return ResponseTrait::error('Payment processing failed', [
+                'error' => $th->getMessage(),
+            ]);
+        }
+    }
     public function payWithSquare(Request $request)
     {
         $validated = $request->validate([
@@ -64,7 +90,7 @@ class PaymentController extends Controller
                 Payment::storePaymentData($paymentData, 'square');
                 $this->updatePaymentStatusAndAssignment($validated);
                 return ResponseTrait::success('Payment Processed Successfully', [
-                    'status' => $payment->getStatus()
+                    'success' => $payment->getStatus()
                 ]);
             }
 
@@ -83,7 +109,7 @@ class PaymentController extends Controller
         $invoice = Invoice::findOrFail($data['invoiceId']);
         $invoice->update(['status' => 1]);
         $this->sendEmailToCustomerAndAdmins($invoice);
-        if($invoice->assigned_package_id != null){
+        if ($invoice->assigned_package_id != null) {
             $invoice->load('assignedPackage');
             $assignedPackage = ClientAssignedPackage::findOrFail($invoice->assignedPackage->id);
             $assignedPackage->update(['status' => 1]);
