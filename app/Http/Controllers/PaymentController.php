@@ -29,11 +29,13 @@ class PaymentController extends Controller
                 'invoiceId' => 'required|exists:invoices,id',
                 'amount' => 'required|numeric',
                 'details' => 'required',
+                'tip' => 'nullable|numeric'
             ]);
             $paymentData = [
                 'invoice_id' => $validated['invoiceId'], 
                 'price' => $validated['amount'],
-                'transaction_id' => $validated['orderId'],
+                'tip' => number_format($validated['tip'] ?? 0),
+                'transaction_id' => $validated['orderId'], 
                 'transaction_details' => json_encode($validated['details'])
             ];
             Payment::storePaymentData($paymentData, 'paypal');
@@ -53,6 +55,7 @@ class PaymentController extends Controller
             'sourceId' => 'required|string',
             'invoiceId' => 'required|exists:invoices,id',
             'amount' => 'required|numeric',
+            'tip' => 'nullable|numeric',
             // 'assignedPackageId' => 'exists:client_assigned_packages,id'
         ]);
         $amount = (int) $validated['amount'] * 100;
@@ -81,8 +84,8 @@ class PaymentController extends Controller
                 $payment = $response->getPayment();
                 $paymentData = [
                     'invoice_id' => $validated['invoiceId'],
-                    // 'assigned_package_id' => $validated['assignedPackageId'] ?? null,
                     'price' => number_format($payment->getAmountMoney()->getAmount() / 100, 2),
+                    'tip' => number_format($validated['tip'] ?? 0),
                     'transaction_id' => $payment->getId(),
                     'transaction_details' => $payment->jsonSerialize()
                 ];
@@ -107,7 +110,7 @@ class PaymentController extends Controller
     {
         DB::beginTransaction();
         $invoice = Invoice::findOrFail($data['invoiceId']);
-        $invoice->update(['status' => 1]);
+        $invoice->update(['status' => 1,'tip' => $data['tip'] ?? 0]);
         $this->sendEmailToCustomerAndAdmins($invoice);
         if ($invoice->assigned_package_id != null) {
             $invoice->load('assignedPackage');

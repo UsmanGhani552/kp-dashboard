@@ -23,7 +23,6 @@ class Package extends Model
         if ($this->document) {
             return asset('images/packages/' . $this->document);
         }
-        return asset('images/packages/default.png');
     }
 
     public static function createPackage(array $data) {

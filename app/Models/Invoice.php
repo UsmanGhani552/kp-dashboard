@@ -11,6 +11,7 @@ class Invoice extends Model
         'client_id',
         'title',
         'price',
+        'tip',
         'remaining_price',
         'status',
         'description',

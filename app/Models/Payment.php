@@ -18,6 +18,7 @@ class Payment extends Model
         'email',
         'payment_gateway',
         'price',
+        'tip',
         'discount',
         'status',
         'transaction_id',
@@ -38,6 +39,7 @@ class Payment extends Model
         $payment->phone = $data['phone'] ?? null; // Square does not provide phone
         $payment->payment_gateway = $paymentGateway;
         $payment->price = $data['price'] ?? 0;
+        $payment->tip = $data['tip'] ?? 0;
         $payment->status = 1;
         $payment->transaction_id = $data['transaction_id'] ?? null;
         $payment->transaction_details = json_encode($data['transaction_details'] ?? []);

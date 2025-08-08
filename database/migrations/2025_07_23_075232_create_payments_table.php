@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('payment_gateway')->nullable();
             $table->string('price');
+            $table->string('tip')->default(0);
             $table->decimal('discount', 10, 2)->default(0);
             $table->boolean('status')->default(0);
             $table->string('transaction_id')->nullable();
