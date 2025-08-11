@@ -33,7 +33,7 @@
           <tr><td>Client Of</td><td>{{ ucwords($order->brand->name) }}</td></tr>
           <tr><td>Order Amount</td><td>${{ number_format($order->price, 2) }}</td></tr>
           <tr><td>Tipped Amount</td><td>${{ number_format($order->tip_amount, 2) }}</td></tr>
-          <tr><td>Total Paid</td><td>${{ number_format($order->price, 2) }}</td></tr>
+          <tr><td>Total Paid</td><td>${{ number_format($order->price, 2) + number_format($order->tip_amount, 2) }}</td></tr>
         </table>
       </td>
     </tr>
