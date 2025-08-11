@@ -10,7 +10,7 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px;">
     <tr>
       <td align="center" style="padding-bottom: 20px; background-color: #ffffff; height: 80px;">
-        <img src="https://koderspedia.com/wp-content/uploads/2023/12/logo-header-2.svg"
+        <img src="{{ asset('images/koderspedia.png') }}"
              alt="Koderspedia Logo"
              width="150"
              style="display: block; font-family: 'Trebuchet MS', sans-serif; font-size: 18px; color: #333333; background-color: #ffffff; text-align: center;">
