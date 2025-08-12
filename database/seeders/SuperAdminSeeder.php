@@ -16,6 +16,11 @@ class SuperAdminSeeder extends Seeder
      */
     public function run(): void
     {
+        $super_admin_role = Role::firstOrCreate(
+            ['name' => 'super admin'],
+            ['guard_name' => 'web']
+        );
+
         $admin_role = Role::firstOrCreate(
             ['name' => 'admin'],
             ['guard_name' => 'web']
@@ -27,12 +32,20 @@ class SuperAdminSeeder extends Seeder
         );
 
         // Create Super Admin user
-        $admin = User::firstOrCreate(
+        $super_admin = User::firstOrCreate(
             ['email' => 'superadmin@gmail.com'],
             [
                 'name' => 'Super Admin',
                 'username' => 'super_admin',
                 'password' => Hash::make('super_admin_123'), // Change this to a secure password
+            ]
+        );
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@gmail.com'],
+            [
+                'name' => 'Admin',
+                'username' => 'admin',
+                'password' => Hash::make('admin_123'), // Change this to a secure password
             ]
         );
         $client = Client::firstOrCreate(
@@ -45,6 +58,7 @@ class SuperAdminSeeder extends Seeder
         );
 
         // Assign role to user
+        $super_admin->assignRole($super_admin_role);
         $admin->assignRole($admin_role);
         $client->assignRole($client_role);
     }

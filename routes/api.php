@@ -12,6 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Models\LoginActivity;
 use Illuminate\Support\Facades\Route;
 
+Route::post('/upload-to-base64', [AuthController::class, 'uploadToBase64'])->name('upload-to-base64');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/send-password-reset-token', [PasswordResetController::class, 'sendPasswordResetToken'])->name('sendPasswordResetToken')->middleware('throttle:password-reset-limit');
@@ -22,6 +23,7 @@ Route::post('/pay-with-paypal',[PaymentController::class,'payWithPaypal'])->name
 Route::get('/get-invoice/{id}', [InvoiceController::class,'getInvoice'])->name('get-invoice');
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/get-user', [AuthController::class, 'getUser'])->name('get-user');
     Route::controller(PackageController::class)->prefix('packages')->name('packages.')->group(function() {
         Route::get('/','index')->name('index');
         Route::post('/store', 'store')->name('store');
