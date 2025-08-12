@@ -77,6 +77,8 @@ class User extends Authenticatable
     {
         if (!empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']); // Remove password from update if empty
         }
         $data['image'] = $this->uploadImage(request(), 'image', 'images/users', "images/users/{$this->image}", $this->image);
         $this->update($data);
