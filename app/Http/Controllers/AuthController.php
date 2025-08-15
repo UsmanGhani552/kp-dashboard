@@ -43,7 +43,7 @@ class AuthController extends Controller
                 if ($client && \Hash::check($request->password, $client->password)) {
                     Auth::login($client);
                     LoginActivity::saveLoginActivity($client->id, 'login');
-                    $token = $client->createToken('client_token')->plainTextToken;
+                    $token = $client->createToken('client_token',expiresAt:now()->addDay())->plainTextToken;
                     $role = $client->getRoleNames()->first();
                     $client['role'] = $role;
                     unset($client['roles']);
@@ -58,7 +58,7 @@ class AuthController extends Controller
                 if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                     $user = Auth::user();
                     LoginActivity::saveLoginActivity($user->id, 'login');
-                    $token = $user->createToken('user_token')->plainTextToken;
+                    $token = $user->createToken('user_token',expiresAt:now()->addDay())->plainTextToken;
                     $role = $user->getRoleNames()->first();
                     $user['role'] = $role;
                     unset($user['roles']);

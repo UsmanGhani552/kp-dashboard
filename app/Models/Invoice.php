@@ -49,6 +49,10 @@ class Invoice extends Model
     {
         return $this->belongsTo(Package::class)->withDefault();
     }
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentType::class,'payment_type_id');
+    }
 
     public function assignedPackage()
     {

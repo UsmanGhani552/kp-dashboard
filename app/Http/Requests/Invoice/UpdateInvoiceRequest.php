@@ -25,7 +25,7 @@ class UpdateInvoiceRequest extends FormRequest
             'client_id' => 'exists:users,id',
             'title' => 'string|max:255',
             'price' => 'numeric|min:0',
-            'remaining_price' => 'numeric|min:0',
+            'remaining_price',
             'description' => 'nullable|string|max:1000',
             'category_id' => 'exists:categories,id',
             'brand_id' => 'exists:brands,id',

@@ -32,8 +32,8 @@
           <tr><td>Created By</td><td>{{ $invoice->createdBy->name }}</td></tr>
           <tr><td>Client Of</td><td>{{ ucwords($invoice->brand->name) }}</td></tr>
           <tr><td>Invoice Amount</td><td>${{ number_format($invoice->price, 2) }}</td></tr>
-          <tr><td>Tipped Amount</td><td>${{ number_format($invoice->tip_amount, 2) }}</td></tr>
-          <tr><td>Total</td><td>${{ number_format($invoice->price, 2) + number_format($invoice->tip_amount, 2) }}</td></tr>
+          <tr><td>Tipped Amount</td><td>${{ number_format($invoice->tip, 2) }}</td></tr>
+          <tr><td>Total</td><td>${{ number_format($invoice->price, 2) + number_format($invoice->tip, 2) }}</td></tr>
         </table>
       </td>
     </tr>

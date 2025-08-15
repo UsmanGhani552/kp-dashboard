@@ -17,7 +17,7 @@ class InvoiceController extends Controller
 {
     public function index()
     {
-        $invoices = Invoice::with('client.packages', 'createdBy', 'brand')->orderBy('id', 'desc')->get();
+        $invoices = Invoice::with('client.packages', 'createdBy', 'brand','paymentMethod')->orderBy('id', 'desc')->get();
         if(count($invoices) > 0) {
             $grouped = $invoices->groupBy('client_id')->map(function ($group) {
                 return $group->sum('price');

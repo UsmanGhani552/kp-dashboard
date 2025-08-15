@@ -25,7 +25,7 @@ class StoreInvoiceRequest extends FormRequest
             'client_id' => 'required|exists:users,id',
             'title' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
-            'remaining_price' => 'required|numeric|min:0',
+            'remaining_price',
             'description' => 'nullable|string|max:1000',
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'required|exists:brands,id',
