@@ -12,7 +12,6 @@ class LoginActivityController extends Controller
         $loginActivities = LoginActivity::with('user')->orderBy('id', 'desc')->get()->map(function($activity){
             $activity->date = $activity->created_at->toDateString();
             $activity->time = $activity->created_at->toTimeString();
-            unset($activity->created_at, $activity->updated_at); 
             return $activity;
         });
         return ResponseTrait::success('Login activities retrieved successfully', [
