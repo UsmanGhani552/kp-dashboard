@@ -96,7 +96,7 @@ class Client extends Authenticatable
             'client_id' => $this->id,
             'package_id' => $package['id'],
         ]);
-
+        $brand = Brand::first();
         // Create the invoice
         Invoice::createInvoice([
             'user_id' => auth()->user()->id,
@@ -109,7 +109,7 @@ class Client extends Authenticatable
             'description' => $package['description'],
             'category_id' => $package['category_id'],
             'payment_type_id' => 3,
-            'brand_id' => 1,
+            'brand_id' => $brand->id,
             'sale_type' => 'Fresh Sale'
         ]);
         return $returnClient ? $this->fresh() : $assignedPackage->load('package.category', 'package.deliverables');

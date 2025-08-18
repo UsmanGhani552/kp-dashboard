@@ -31,9 +31,9 @@
           <tr><td>Customer</td><td>{{ $order->client->name }}</td></tr>
           <tr><td>Created By</td><td>{{ $order->createdBy->name }}</td></tr>
           <tr><td>Client Of</td><td>{{ ucwords($order->brand->name) }}</td></tr>
-          <tr><td>Invoice Amount</td><td>${{ $invoice->price }}</td></tr>
-          <tr><td>Tipped Amount</td><td>${{ $invoice->tip }}</td></tr>
-          <tr><td>Total</td><td>${{ $invoice->price + $invoice->tip }}</td></tr>
+          <tr><td>Invoice Amount</td><td>${{ $order->price }}</td></tr>
+          <tr><td>Tipped Amount</td><td>${{ $order->tip }}</td></tr>
+          <tr><td>Total</td><td>${{ $order->price + $order->tip }}</td></tr>
         </table>
       </td>
     </tr>
