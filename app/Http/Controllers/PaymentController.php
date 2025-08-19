@@ -62,7 +62,7 @@ class PaymentController extends Controller
         $square = new SquareClient(
             token: env('SQUARE_TOKEN'),
             options: [
-                'baseUrl' =>  env('SQUARE_ENVIRONMENT') === 'production' ? Environments::Production->value : Environments::Sandbox->value,
+                'baseUrl' =>  Environments::Production->value,
             ],
         );
         try {
