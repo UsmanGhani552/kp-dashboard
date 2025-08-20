@@ -10,7 +10,7 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px;">
     <tr>
       <td align="center" style="padding-bottom: 20px; background-color: #ffffff; height: 80px;">
-        <img src="{{ asset('images/koderspedia.png') }}"
+        <img src="{{ asset('images/brands/' . $order->brand->logo) }}"
              alt="Koderspedia Logo"
              width="150"
              style="display: block; font-family: 'Trebuchet MS', sans-serif; font-size: 18px; color: #333333; background-color: #ffffff; text-align: center;">
@@ -50,9 +50,9 @@
     </tr>
     <tr>
       <td style="font-size: 16px; padding-top: 20px;">
-        Thanks again for choosing Koderspedia!<br><br>
-        <strong>Team Koderspedia</strong><br>
-        <a href="mailto:sales@koderspedia.com">sales@koderspedia.com</a><br>
+        Thanks again for choosing {{ $order->brand->name }}!<br><br>
+        <strong>Team {{ $order->brand->name }}</strong><br>
+        <a href="mailto:{{ $order->brand->email  }}">{{ $order->brand->email }}</a><br>
         <a href="https://www.koderspedia.com">www.koderspedia.com</a>
       </td>
     </tr>

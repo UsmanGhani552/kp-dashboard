@@ -50,7 +50,7 @@
     </tr>
     <tr>
       <td style="font-size: 16px; padding-top: 20px;">
-        Thanks again for choosing Koderspedia!<br><br>
+        Thanks again for choosing {{ $invoice->brand->name }}!<br><br>
         <strong>Team {{ $invoice->brand->name }}</strong><br>
         <a href="mailto:{{ $invoice->brand->email  }}">{{ $invoice->brand->email }}</a><br>
         <a href="https://www.koderspedia.com">www.koderspedia.com</a>
