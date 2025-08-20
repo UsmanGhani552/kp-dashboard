@@ -53,7 +53,7 @@
         Thanks again for choosing {{ $order->brand->name }}!<br><br>
         <strong>Team {{ $order->brand->name }}</strong><br>
         <a href="mailto:{{ $order->brand->email  }}">{{ $order->brand->email }}</a><br>
-        <a href="https://www.koderspedia.com">www.koderspedia.com</a>
+        <a href="https://www.{{ $order->brand->name }}.com">www.{{ $order->brand->name }}.com</a>
       </td>
     </tr>
   </table>

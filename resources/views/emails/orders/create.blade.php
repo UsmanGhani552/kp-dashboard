@@ -53,7 +53,7 @@
         Thanks again for choosing {{ $invoice->brand->name }}!<br><br>
         <strong>Team {{ $invoice->brand->name }}</strong><br>
         <a href="mailto:{{ $invoice->brand->email  }}">{{ $invoice->brand->email }}</a><br>
-        <a href="https://www.koderspedia.com">www.koderspedia.com</a>
+        <a href="https://www.{{ strtolower($invoice->brand->name) }}.com">www.{{ strtolower($invoice->brand->name) }}.com</a>
       </td>
     </tr>
   </table>
