@@ -40,6 +40,7 @@ class OrderCreated extends Mailable
 
         return $this
             ->subject("NEW ORDER #{$this->invoice->id} - {$brandName}")
+            ->from($brandName)
             ->markdown('emails.orders.create', [
                 'invoice' => $this->invoice,
                 'brandLogo' => $brandLogo,
