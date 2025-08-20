@@ -28,7 +28,7 @@ class UpdateClientRequest extends FormRequest
             'phone' => 'string|max:12',
             'address' => 'nullable|string',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'password' => 'string|min:8|confirmed',
+            'password' => 'string|min:8',
             'package_id' => 'exists:packages,id',
         ];
     }
