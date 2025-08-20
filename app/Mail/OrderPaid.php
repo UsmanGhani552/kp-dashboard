@@ -33,8 +33,10 @@ class OrderPaid extends Mailable
      */
     public function build()
     {
+        $brand = $this->order->brand;
         return $this
                 ->subject('PAYMENT RECEIVED')
+                ->from($brand->email,$brand->name)
                 ->markdown('emails.orders.paid')
                 ->with(["order" => $this->order, 'isClient' => $this->isClient]);
     }
