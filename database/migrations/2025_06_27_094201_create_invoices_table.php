@@ -16,14 +16,8 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->bigInteger('client_id')->unsigned()->nullable();
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('set null');
-            $table->foreign('client_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('set null');
+            $table->foreign('user_id') ->references('id')->on('users')->onDelete('set null');
+            $table->foreign('client_id') ->references('id')->on('users')->onDelete('set null');
             $table->string('title');
             $table->decimal('price', 10, 2)->default(0);
             $table->decimal('tip')->default(0);
@@ -33,7 +27,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->foreignId('payment_type_id')->constrained('payment_types')->onDelete('cascade');
             $table->foreignId('brand_id')->constrained('brands')->onDelete('cascade');
-            $table->foreignId('package_id')->nullable()->constrained('packages');
+            $table->foreignId('package_id')->nullable()->constrained('packages')->onDelete('set null');
             $table->foreignId('assigned_package_id')->nullable()->constrained('client_assigned_packages')->onDelete('set null');
             $table->string('sale_type'); // e.g., one-time, subscription
             $table->timestamps();
