@@ -25,6 +25,7 @@ class StorePackageRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
+            'client_id' => 'nullable|exists:users,id',
             'price' => 'required|numeric|min:0',
             'additional_notes' => 'nullable|string',
             'document' => 'file|mimes:pdf,doc,docx,.txt',

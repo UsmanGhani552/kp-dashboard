@@ -15,7 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->string('category_id');
+            $table->foreignId('category_id')
+                ->nullable()   // since you're using nullOnDelete()
+                ->constrained('categories')
+                ->nullOnDelete();
+            $table->foreignId('client_id')->nullable()->constrained('users')->nullOnDelete();
             $table->decimal('price', 10, 2)->default(0);
             $table->text('additional_notes')->nullable();
             $table->string('document')->nullable();

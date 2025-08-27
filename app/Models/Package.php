@@ -12,6 +12,7 @@ class Package extends Model
         'name',
         'description',
         'category_id',
+        'client_id',
         'price',
         'additional_notes',
         'document',
@@ -32,10 +33,17 @@ class Package extends Model
             'name' => $data['name'],
             'description' => $data['description'],
             'category_id' => $data['category_id'],
+            'client_id' => $data['client_id'],
             'price' => $data['price'],
             'additional_notes' => $data['additional_notes'] ?? null,
             'document' => $data['document'] ?? null,    
         ]);
+        if(isset($data['client_id'])){
+            ClientAssignedPackage::assignPackage([
+                'client_id' => $data['client_id'],
+                'package_id' => $package->id,
+            ]);
+        }
         return $package;
     }
     public function updatePackage(array $data) {
@@ -50,6 +58,7 @@ class Package extends Model
             'document' => $data['document'],    
         ]);
         return $this->fresh();
+
     }
     public function deletePackage() {
         $this->deleteImage( "images/packages/{$this->document}");

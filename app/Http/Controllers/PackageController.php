@@ -19,7 +19,13 @@ class PackageController extends Controller
 {
     public function index()
     {
-        $packages = Package::with('category', 'deliverables')->orderBy('id', 'desc')->get();
+        $user = Auth::user();
+        $packages = Package::with('category', 'deliverables')
+            ->orderBy('id', 'desc');
+        if ($user->roles()->first()->name === 'client') {
+            $packages = $packages->where('client_id',$user->id)->orWhereNull('client_id');
+        }
+        $packages = $packages->get();
         return ResponseTrait::success('Packages retrieved successfully', [
             'packages' => $packages,
         ]);
@@ -81,22 +87,22 @@ class PackageController extends Controller
         ]);
     }
 
-    public function assignPackage($package_id) {
+    public function assignPackage($package_id)
+    {
         try {
             $client_id = auth()->user()->id;
             $client = Client::findOrFail($client_id);
             $package = Package::findOrFail($package_id)->toArray();
-            $alreadyAssigned = ClientAssignedPackage::where('client_id',$client->id)->where('package_id',$package_id)->first();
-            if($alreadyAssigned){
+            $alreadyAssigned = ClientAssignedPackage::where('client_id', $client->id)->where('package_id', $package_id)->first();
+            if ($alreadyAssigned) {
                 return ResponseTrait::error('Package Already Assigned');
             }
             $assignedPackage = $client->assignPackageWithInvoice($package);
-            return ResponseTrait::success('Package Assigned Successfully',[
+            return ResponseTrait::success('Package Assigned Successfully', [
                 'assigned_package' => $assignedPackage
             ]);
         } catch (\Throwable $th) {
             return ResponseTrait::error('An error occurred while deleting the package: ' . $th->getMessage());
-
         }
     }
 }

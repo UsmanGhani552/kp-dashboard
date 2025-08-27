@@ -47,7 +47,7 @@ class DataTrasferSeeder extends Seeder
             $data = json_decode(file_get_contents($invoices), true);
             $koderspedia_brand_id = Brand::where('name', 'Koderspedia')->firstOrFail()->id;
             foreach ($data[2]['data'] as $item) {
-                
+
                 $customer_email = $customers->firstWhere('id', $item['customer_id'])['email'];
                 $category = Category::where(function ($query) use ($item) {
                     $name = strtolower($item['item_category']);
@@ -63,11 +63,14 @@ class DataTrasferSeeder extends Seeder
                 })->first();
                 $payment_type_id = PaymentType::where('name', $item['payment_type'])->firstOrFail()->id;
 
-                $invoicesIndb = Invoice::create(
+                $invoicesIndb = Invoice::updateOrCreate(
                     [
-                        'user_id' => 1,
                         'client_id' => Client::where('email', $customer_email)->firstOrFail()->id,
                         'title' => $item['item_name'],
+                        'created_at' => $item['created_at'],
+                    ],
+                    [
+                        'user_id' => 1,
                         'price' => $item['item_price'],
                         'remaining_price' => $item['remaining_price'],
                         'status' => $item['is_paid'],
@@ -76,12 +79,11 @@ class DataTrasferSeeder extends Seeder
                         'payment_type_id' => $payment_type_id,
                         'brand_id' => $brand->id ?? $koderspedia_brand_id,
                         'sale_type' => $item['sale_type'],
-                        'created_at' => $item['created_at'],
                         'updated_at' => $item['updated_at'],
                     ]
                 );
                 Log::info(json_encode([
-                    'invoice' => $invoicesIndb->only(['id', 'user_id', 'client_id', 'category_id', 'payment_type_id', 'brand_id']),
+                    'invoice' => $invoicesIndb->only(['id','title' ,'user_id', 'client_id', 'category_id', 'payment_type_id', 'brand_id']),
                     'brand' => $brand->id ?? $brand_name
                 ]));
             }
