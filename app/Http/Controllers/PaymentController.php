@@ -13,6 +13,7 @@ use App\Models\Invoice;
 use App\Models\ClientAssignedPackage;
 use App\Models\Payment;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Square\Environments;
 use Square\Payments\Requests\CreatePaymentRequest;
 use Square\Types\Money;
@@ -31,6 +32,7 @@ class PaymentController extends Controller
                 'details' => 'required',
                 'tip' => 'nullable|numeric'
             ]);
+            Log::info($validated);
             $paymentData = [
                 'invoice_id' => $validated['invoiceId'], 
                 'price' => $validated['amount'],
