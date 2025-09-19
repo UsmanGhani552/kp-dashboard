@@ -121,13 +121,17 @@ class InvoiceController extends Controller
 
     public function sendEmailToCustomerAndAdmins($invoice)
     {
-        // Email to Client
-        Mail::to($invoice->client->email)
-            ->send(new OrderCreated($invoice));
-
-        // Email to agent and admins
-        Mail::to($invoice->createdBy->email)
-            ->cc(config('constants.emails'))
-            ->send(new OrderCreated($invoice));
+        try {
+            // Email to Client
+            Mail::to($invoice->client->email)
+                ->send(new OrderCreated($invoice));
+    
+            // Email to agent and admins
+            Mail::to($invoice->createdBy->email)
+                ->cc(config('constants.emails'))
+                ->send(new OrderCreated($invoice));
+        } catch (\Throwable $th) {
+            return ResponseTrait::error('An error occurred while creating the invoice: ' . $th->getMessage());
+        }
     }
 }

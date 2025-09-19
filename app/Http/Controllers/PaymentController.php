@@ -34,17 +34,17 @@ class PaymentController extends Controller
             ]);
             Log::info($validated);
             $paymentData = [
-                'invoice_id' => $validated['invoiceId'], 
+                'invoice_id' => $validated['invoiceId'],
                 'price' => $validated['amount'],
                 'tip' => number_format($validated['tip'] ?? 0),
-                'transaction_id' => $validated['orderId'], 
+                'transaction_id' => $validated['orderId'],
                 'transaction_details' => json_encode($validated['details'])
             ];
             Payment::storePaymentData($paymentData, 'paypal');
             $this->updatePaymentStatusAndAssignment($validated);
             return ResponseTrait::success('Payment Processed Successfully', [
-                    'success' => 1
-                ]);
+                'success' => 1
+            ]);
         } catch (\Throwable $th) {
             return ResponseTrait::error('Payment processing failed', [
                 'error' => $th->getMessage(),
@@ -112,7 +112,7 @@ class PaymentController extends Controller
     {
         DB::beginTransaction();
         $invoice = Invoice::findOrFail($data['invoiceId']);
-        $invoice->update(['status' => 1,'tip' => $data['tip'] ?? 0]);
+        $invoice->update(['status' => 1, 'tip' => $data['tip'] ?? 0]);
         $this->sendEmailToCustomerAndAdmins($invoice);
         if ($invoice->assigned_package_id != null) {
             $invoice->load('assignedPackage');
@@ -124,13 +124,17 @@ class PaymentController extends Controller
 
     public function sendEmailToCustomerAndAdmins($invoice)
     {
-        // Email to Client
-        Mail::to($invoice->client->email)
-            ->send(new OrderPaid($invoice, true));
+        try {
+            // Email to Client
+            Mail::to($invoice->client->email)
+                ->send(new OrderPaid($invoice, true));
 
-        // Email to agent and admins
-        Mail::to($invoice->createdBy->email)
-            ->cc(config('constants.emails'))
-            ->send(new OrderPaid($invoice));
+            // Email to agent and admins
+            Mail::to($invoice->createdBy->email)
+                ->cc(config('constants.emails'))
+                ->send(new OrderPaid($invoice));
+        } catch (\Throwable $th) {
+            return ResponseTrait::error('An error occurred while paying the invoice: ' . $th->getMessage());
+        }
     }
 }
