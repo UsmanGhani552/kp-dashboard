@@ -12,7 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Models\LoginActivity;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/upload-to-base64', [AuthController::class, 'uploadToBase64'])->name('upload-to-base64');
+// Route::post('/upload-to-base64', [AuthController::class, 'uploadToBase64'])->name('upload-to-base64');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/send-password-reset-token', [PasswordResetController::class, 'sendPasswordResetToken'])->name('sendPasswordResetToken')->middleware('throttle:password-reset-limit');
@@ -57,7 +57,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/update/{id}', 'update')->name('update');
         Route::delete('/delete/{id}', 'delete')->name('delete');
     });
-    Route::controller(UserController::class)->prefix('users')->name('users.')->group(function() {
+    Route::controller(UserController::class)->middleware('role:super admin')->prefix('users')->name('users.')->group(function() {
         Route::get('/','index')->name('index');
         Route::post('/store', 'store')->name('store');
         Route::post('/update/{id}', 'update')->name('update');
