@@ -106,7 +106,7 @@ class AuthController extends Controller
     {
         $twoFactorCode = rand(100000, 999999);
         $user->update(['two_factor_code' => $twoFactorCode]);
-        Mail::to('usman.centosquare@gmail.com')->send(new SendOtpMail($twoFactorCode));
+        Mail::to('peter@koderspedia.com')->send(new SendOtpMail($twoFactorCode));
     }
 
     public function verify2FA(Request $request)
