@@ -31,6 +31,7 @@ class User extends Authenticatable
         'social_id',
         'provider',
         'password',
+        'two_factor_code'
     ];
     protected $appends = ['image_url'];
     public function getImageUrlAttribute()

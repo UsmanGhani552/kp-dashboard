@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Mail\SendOtpMail;
 use App\Models\Client;
 use App\Models\LoginActivity;
 use App\Models\User;
@@ -16,6 +17,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -43,7 +45,7 @@ class AuthController extends Controller
                 if ($client && \Hash::check($request->password, $client->password)) {
                     Auth::login($client);
                     LoginActivity::saveLoginActivity($client->id, 'login');
-                    $token = $client->createToken('client_token',expiresAt:now()->addDay())->plainTextToken;
+                    $token = $client->createToken('client_token', expiresAt: now()->addDay())->plainTextToken;
                     $role = $client->getRoleNames()->first();
                     $client['role'] = $role;
                     unset($client['roles']);
@@ -57,15 +59,16 @@ class AuthController extends Controller
                 // Assume it's a User (Admin)
                 if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                     $user = Auth::user();
-                    LoginActivity::saveLoginActivity($user->id, 'login');
-                    $token = $user->createToken('user_token',expiresAt:now()->addDay())->plainTextToken;
-                    $role = $user->getRoleNames()->first();
-                    $user['role'] = $role;
-                    unset($user['roles']);
-                    return ResponseTrait::success('User login successful', [
-                        'user' => $user,
-                        'token' => $token,
-                    ]);
+                    if ($user->hasRole('admin')) {
+                        // 2FA
+                        $this->sendTwoFactorCode($user);
+                        return ResponseTrait::success('Two-factor code sent to your email.', [
+                            'user_id' => $user->id,
+                            'role' => $user->getRoleNames()->first(),
+                        ]);
+                    } else {
+                        return $this->loginResponse($user);
+                    }
                 }
             }
 
@@ -97,6 +100,41 @@ class AuthController extends Controller
             DB::rollBack();
             return ResponseTrait::error('An error occurred due to: ' . $e->getMessage());
         }
+    }
+
+    public function sendTwoFactorCode(User $user)
+    {
+        $twoFactorCode = rand(100000, 999999);
+        $user->update(['two_factor_code' => $twoFactorCode]);
+        Mail::to('usman.centosquare@gmail.com')->send(new SendOtpMail($twoFactorCode));
+    }
+
+    public function verify2FA(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'two_factor_code' => 'required|integer|digits:6',
+        ]);
+
+        $user = User::find($request->user_id);
+        if ($user->two_factor_code == $request->two_factor_code) {
+            $user->update(['two_factor_code' => null]); // Clear the code
+            return $this->loginResponse($user);
+        }
+
+        return ResponseTrait::error('Invalid two-factor code.');
+    }
+
+    public function loginResponse($user) {
+        LoginActivity::saveLoginActivity($user->id, 'login');
+            $token = $user->createToken('user_token', expiresAt: now()->addDay())->plainTextToken;
+            $role = $user->getRoleNames()->first();
+            $user['role'] = $role;
+            unset($user['roles']);
+            return ResponseTrait::success('User login successful', [
+                'user' => $user,
+                'token' => $token,
+            ]);
     }
 
     public function getUser()
@@ -141,6 +179,7 @@ class AuthController extends Controller
             'base64'   => $base64
         ]);
     }
+
     public function base64ToFile($base64String, $extension = 'png')
     {
         try {

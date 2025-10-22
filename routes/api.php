@@ -21,6 +21,7 @@ Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']
 Route::post('/pay-with-square',[PaymentController::class,'payWithSquare'])->name('pay-with-square');
 Route::post('/pay-with-paypal',[PaymentController::class,'payWithPaypal'])->name('pay-with-paypal');
 Route::get('/get-invoice/{id}', [InvoiceController::class,'getInvoice'])->name('get-invoice');
+Route::post('/verify2fa', [AuthController::class, 'verify2FA'])->name('verify2fa');
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/get-user', [AuthController::class, 'getUser'])->name('get-user');
