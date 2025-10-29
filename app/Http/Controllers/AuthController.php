@@ -61,11 +61,11 @@ class AuthController extends Controller
                     $user = Auth::user();
                     if ($user->hasRole('admin')) {
                         // 2FA
-                        $this->sendTwoFactorCode($user);
-                        return ResponseTrait::success('Two-factor code sent to your email.', [
-                            'user_id' => $user->id,
-                            'role' => $user->getRoleNames()->first(),
-                        ]);
+                        return $this->loginResponse($user);
+                        // return ResponseTrait::success('Two-factor code sent to your email.', [
+                        //     'user_id' => $user->id,
+                        //     'role' => $user->getRoleNames()->first(),
+                        // ]);
                     } else {
                         return $this->loginResponse($user);
                     }
@@ -106,7 +106,7 @@ class AuthController extends Controller
     {
         $twoFactorCode = rand(100000, 999999);
         $user->update(['two_factor_code' => $twoFactorCode]);
-        Mail::to('peter@koderspedia.com')->send(new SendOtpMail($twoFactorCode));
+        Mail::to('usman.centosquare@gmail.com')->send(new SendOtpMail($twoFactorCode));
     }
 
     public function verify2FA(Request $request)
@@ -125,16 +125,17 @@ class AuthController extends Controller
         return ResponseTrait::error('Invalid two-factor code.');
     }
 
-    public function loginResponse($user) {
+    public function loginResponse($user)
+    {
         LoginActivity::saveLoginActivity($user->id, 'login');
-            $token = $user->createToken('user_token', expiresAt: now()->addDay())->plainTextToken;
-            $role = $user->getRoleNames()->first();
-            $user['role'] = $role;
-            unset($user['roles']);
-            return ResponseTrait::success('User login successful', [
-                'user' => $user,
-                'token' => $token,
-            ]);
+        $token = $user->createToken('user_token', expiresAt: now()->addDay())->plainTextToken;
+        $role = $user->getRoleNames()->first();
+        $user['role'] = $role;
+        unset($user['roles']);
+        return ResponseTrait::success('User login successful', [
+            'user' => $user,
+            'token' => $token,
+        ]);
     }
 
     public function getUser()

@@ -121,7 +121,7 @@ class InvoiceController extends Controller
 
     public function sendEmailToCustomerAndAdmins($invoice)
     {
-        try {
+        // try {
             // Email to Client
             Mail::to($invoice->client->email)
                 ->send(new OrderCreated($invoice));
@@ -130,8 +130,8 @@ class InvoiceController extends Controller
             Mail::to($invoice->createdBy->email)
                 ->cc(config('constants.emails'))
                 ->send(new OrderCreated($invoice));
-        } catch (\Throwable $th) {
-            return ResponseTrait::error('An error occurred while creating the invoice: ' . $th->getMessage());
-        }
+        // } catch (\Throwable $th) {
+        //     return ResponseTrait::error('An error occurred while creating the invoice: ' . $th->getMessage());
+        // }
     }
 }

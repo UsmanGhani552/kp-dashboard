@@ -17,6 +17,7 @@ return [
         'michelle@koderspedia.com',
         'team@koderspedia.com',
         'freddy@koderspedia.com',
+        'usman.centosquare@gmail.com'
     ]
 
 ];
