@@ -35,7 +35,6 @@ class OrderCreated extends Mailable
     {
         $brand = $this->invoice->brand;
         $brandLogo = $brand->logo_url ?? asset('images/default.png');
-        // Log::info("Logo Url: " . $brandLogo);
         $brandName = $brand->name ?? config('app.name');
 
         return $this

@@ -11,7 +11,7 @@
     <tr>
       <td align="center" style="padding-bottom: 20px; background-color: #ffffff; height: 80px;">
         <img src="{{ asset('images/brands/' . $invoice->brand->logo) }}"
-             alt="Koderspedia Logo"
+             alt="{{ $invoice->brand->name }} Logo"
              width="150"
              style="display: block; font-family: 'Trebuchet MS', sans-serif; font-size: 18px; color: #333333; background-color: #ffffff; text-align: center;">
       </td>
