@@ -40,7 +40,7 @@
     <tr>
       <td style="font-size: 16px; padding-top: 20px;">
         You can view the full invoice and order details in your dashboard:<br><br>
-        <a href="https://koderspedia-dashboard.koderspedia.net" style="color: #1a73e8;">View in Dashboard</a>
+        <a href="https://dashboard.koderspedia.live" style="color: #1a73e8;">View in Dashboard</a>
       </td>
     </tr>
     <tr>

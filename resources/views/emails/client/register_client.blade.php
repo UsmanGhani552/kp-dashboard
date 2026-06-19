@@ -43,7 +43,7 @@
     <tr>
       <td style="font-size: 16px; padding-top: 20px;">
         You can log in to your account anytime here:<br><br>
-        <a href="https://koderspedia-dashboard.koderspedia.net" style="color: #1a73e8;">Login to Dashboard</a>
+        <a href="https://dashboard.koderspedia.live" style="color: #1a73e8;">Login to Dashboard</a>
       </td>
     </tr>
     <tr>
